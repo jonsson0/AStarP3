@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <top>
+        <Label text="AStar shortest pathfinder" BorderPane.alignment="CENTER">
+            <font>
+                <Font size="28.0" />
+            </font>
+        </Label>
+    </top>
+    <bottom>
+        <FlowPane prefHeight="49.0" prefWidth="599.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" onAction="#startPathfinder" prefHeight="27.0" prefWidth="130.0" text="GO">
+                    <FlowPane.margin>
+                        <Insets left="170.0" top="10.0" />
+                    </FlowPane.margin>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#exitButton" prefHeight="27.0" prefWidth="124.0" text="Exit the program">
+                    <FlowPane.margin>
+                        <Insets left="91.0" top="10.0" />
+                    </FlowPane.margin>
+                </Button>
+            </children>
+        </FlowPane>
+    </bottom>
+    <right>
+      <Group BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets right="10.0" top="30.0" />
+         </BorderPane.margin>
+         <children>
+              <TextArea fx:id="printArea" prefHeight="296.0" prefWidth="241.0" />
+         </children>
+      </Group>
+    </right>
+   <center>
+        <VBox prefHeight="281.0" prefWidth="328.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label prefHeight="46.0" prefWidth="147.0" text="Where do you wanna start?" />
+                <ComboBox fx:id="comboStart" onAction="#startVertexChoice" prefWidth="150.0" promptText="Choose vertex" />
+                <Label prefHeight="47.0" prefWidth="145.0" text="Where do you wanna end?" />
+                <ComboBox fx:id="comboDestination" onAction="#destinationVertexChoice" prefHeight="33.0" prefWidth="150.0" promptText="Choose vertex" />
+                <Label prefHeight="48.0" prefWidth="196.0" text="Which method do you wanna use?" />
+                <ComboBox fx:id="comboEstimation" onAction="#estimationChoice" prefWidth="150.0" promptText="Choose method" />
+            </children>
+            <BorderPane.margin>
+                <Insets left="10.0" />
+            </BorderPane.margin>
+        </VBox>
+   </center>
+</BorderPane>
