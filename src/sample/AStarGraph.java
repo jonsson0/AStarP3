@@ -35,12 +35,13 @@ public class AStarGraph {
 
             return false;
         }
+
         // Openlist are the uncompleted vertices
         PriorityQueue<sample.Vertex> Openlist = new PriorityQueue<sample.Vertex>();
 
         // Closedlist is the completed vertices
         ArrayList<sample.Vertex> Closedlist = new ArrayList<sample.Vertex>();
-        sample.Vertex Current;                                                 // the active vertex
+        sample.Vertex CurrentV;                                                 // the active vertex
         ArrayList<sample.Vertex> CurrentNeighbors;
         sample.Vertex Neighbor;
 
@@ -51,11 +52,11 @@ public class AStarGraph {
 
                 if (choice.equals("Manhattan")) {
 
-                    vertex.setH(Manhattan(vertex, destination));
+                    vertex.setH(manhattanHeuristic(vertex, destination));
                 }
                 if (choice.equals("Euclidean")) {
 
-                    vertex.setH(Euclidean(vertex, destination));
+                    vertex.setH(euclideanHeuristic(vertex, destination));
                 }
             }
         });
@@ -72,40 +73,39 @@ public class AStarGraph {
         // run as long as its not empty
         while (!Openlist.isEmpty()) {
 
-            // removes current from openlist
-            Current = Openlist.remove();
+            CurrentV = Openlist.remove();
 
             // adds the current to the closed list
-            Closedlist.add(Current);
-            if (Current == destination) {
+            Closedlist.add(CurrentV);
+            if (CurrentV == destination) {
 
                 return true;
             }
 
-            for (int i = 0; i < Current.getNeighbours().size(); i++) {
+            for (int i = 0; i < CurrentV.getNeighbours().size(); i++) {
 
-                double weight = Current.getNeighbourDistance().get(i);
+                double weight = CurrentV.getNeighbourDistance().get(i);
 
-                double tempGofV = Current.getG() + weight;
+                double tempGofV = CurrentV.getG() + weight;
 
 
-                if (tempGofV <= Current.getNeighbours().get(i).getG()) {
+                if (tempGofV <= CurrentV.getNeighbours().get(i).getG()) {
 
-                    Current.getNeighbours().get(i).setPrev(Current);
+                    CurrentV.getNeighbours().get(i).setPrev(CurrentV);
 
-                    Current.getNeighbours().get(i).setg(tempGofV);
+                    CurrentV.getNeighbours().get(i).setg(tempGofV);
 
-                    Current.getNeighbours().get(i).calculateF();
+                    CurrentV.getNeighbours().get(i).calculateF();
 
-                    if ((!Closedlist.contains(Current.getNeighbours().get(i))) && (!Openlist.contains(Current.getNeighbours().get(i)))) {
+                    if ((!Closedlist.contains(CurrentV.getNeighbours().get(i))) && (!Openlist.contains(CurrentV.getNeighbours().get(i)))) {
 
-                        Openlist.offer(Current.getNeighbours().get(i));
+                        Openlist.offer(CurrentV.getNeighbours().get(i));
 
                         //if openlist has neighbour vertex(i), remove then add it again
-                    } else if (Openlist.contains(Current.getNeighbours().get(i))) {
+                    } else if (Openlist.contains(CurrentV.getNeighbours().get(i))) {
 
-                        Openlist.remove(Current.getNeighbours().get(i));
-                        Openlist.offer(Current.getNeighbours().get(i));
+                        Openlist.remove(CurrentV.getNeighbours().get(i));
+                        Openlist.offer(CurrentV.getNeighbours().get(i));
                     }
                 }
             }
@@ -114,17 +114,17 @@ public class AStarGraph {
     }
 
     //  horizontal & vertical distance calculated
-    public Double Manhattan(sample.Vertex from, sample.Vertex goal) {
-        double distance = Math.abs(goal.getX() - from.getX()) + Math.abs(goal.getY() - from.getY());
-        return distance;
+    public Double manhattanHeuristic(sample.Vertex from, sample.Vertex to) {
+        double dist = Math.abs(to.getX() - from.getX()) + Math.abs(to.getY() - from.getY());
+        return dist;
     }
 
     // the direct distance
-    public Double Euclidean(sample.Vertex from, sample.Vertex to) {
+    public Double euclideanHeuristic(sample.Vertex from, sample.Vertex to) {
         double x = to.getX() - from.getX();
         double y = to.getY() - from.getY();
-        double distance = Math.sqrt((x * x) + (y * y));
-        return distance;
+        double dist = Math.sqrt((x * x) + (y * y));
+        return dist;
     }
 
     public HashMap<String, sample.Vertex> getVertices() {
@@ -152,6 +152,7 @@ class Vertex implements Comparable<sample.Vertex> {
 
     // Constructor
     public Vertex(String id, int x_cor, int y_cor) {
+
         this.id = id;
         this.x = x_cor;
         this.y = y_cor;
@@ -162,6 +163,7 @@ class Vertex implements Comparable<sample.Vertex> {
     }
 
     public void addOutEdge(sample.Vertex toV, Double dist) {
+
         Neighbours.add(toV);
         NeighbourDistance.add(dist);
     }

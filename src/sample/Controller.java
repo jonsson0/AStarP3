@@ -59,26 +59,30 @@ public class Controller {
     }
 
     // Smart print graph
-    public void printMyMaze(Vertex destination) {
-        Vertex pvertex = destination;
+    public void printShortestPath(Vertex destination) {
+        Vertex pVertex = destination;
         printArea.appendText("You are going to: " + destination.getId() + " | Distance: " + destination.getF() + "\n");
         Stack<Vertex> Path = new Stack<>();
         int limit = 0;
 
-        while (pvertex != null) {
-            Path.push(pvertex);
-            pvertex = pvertex.getPrev();
+        while (pVertex != null) {
+            Path.push(pVertex);
+            pVertex = pVertex.getPrev();
         }
-        if (!Path.isEmpty())
+        if (!Path.isEmpty()) {
             limit = Path.size();
-        for (int i = 0; i < limit - 1; i++)
-            printArea.appendText(Path.pop().getId() + " - > ");
+        }
+        for (int i = 0; i < limit - 1; i++) {
+            printArea.appendText(Path.pop().getId() + " to ");
+        }
+
         if (limit > 0) {
+
             printArea.appendText(Path.pop().getId() + "\n");
         }
     }
 
-    public void initialize(String selA, String selB, String selEst) {
+    public void initialize(String selA, String selB, String selMethod) {
         System.out.println();
 
         // set comboboxes to the values of the vertices hashmap
@@ -92,7 +96,7 @@ public class Controller {
         // adds "Manhattan" og "Euclidean" to the list and used in the choose method button (comboEstimation)
         ObservableList<String> estimationMethod = FXCollections.observableArrayList("Manhattan", "Euclidean");
         comboEstimation.setItems(estimationMethod);
-        comboEstimation.getSelectionModel().select(selEst);
+        comboEstimation.getSelectionModel().select(selMethod);
     }
 
     // just an overloading for the start, it selects the start to A, end to A and estimation to Manhattan
@@ -139,7 +143,7 @@ public class Controller {
          */
         Vertex start = comboStart.getValue();
         AStarGraph.A_Star(start, comboDestination.getValue(), comboEstimation.getValue());
-        printMyMaze(comboDestination.getValue());
+        printShortestPath(comboDestination.getValue());
 
         AStarGraph = CreateGraph();
         initialize(comboStart.getValue().getId(), comboDestination.getValue().getId(), comboEstimation.getValue());
